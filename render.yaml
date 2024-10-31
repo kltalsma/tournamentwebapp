@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: frontend
+    env: docker
+    dockerfilePath: ./frontend/Dockerfile
+    plan: free
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm start"
+
+  - type: web
+    name: backend
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    plan: free
+    startCommand: "npm start"
+    
+  - type: database
+    name: database
+    plan: free
+    postgresVersion: 13
+
