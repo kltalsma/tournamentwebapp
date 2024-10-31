@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./backend:/app
+    environment:
+      - NODE_ENV=development
+      - PORT=5001
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=volleyball_tournament
+      - DB_HOST=db  # Updated to use Docker service name
+    depends_on:
+      - db
+    command: sh -c "until pg_isready -h db -p 5432; do echo waiting for postgres; sleep 2; done; node app.js"
+    networks:
+      - volleyball-network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    environment:
+      - REACT_APP_API_URL=http://localhost:5001  # Updated to use Docker service name
+    networks:
+      - volleyball-network
+
+  db:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=volleyball_tournament
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - volleyball-network
+
+volumes:
+  postgres_data:
+
+networks:
+  volleyball-network:
+    driver: bridge

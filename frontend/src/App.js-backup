@@ -1,0 +1,131 @@
+// frontend/src/App.js
+import React, { useState } from 'react';
+import apiClient from './apiClient';
+import ConfigurationForm from './components/ConfigurationForm';
+import PouleSchedule from './components/PouleSchedule';
+import MatchResults from './components/MatchResults';
+import LiveStandings from './components/LiveStandings';
+import './styles/index.css';
+
+function App() {
+  const [message, setMessage] = useState('');
+  const [schedule, setSchedule] = useState([]);
+  const [matches, setMatches] = useState([]); // Ensure matches has a default empty array
+  const [standings, setStandings] = useState([]);
+
+  const handleCreateTournament = async (config) => {
+    try {
+      const response = await apiClient.post('/api/tournament', config);
+      setMessage(`Tournament created successfully with ID: ${response.data.id}`);
+      setSchedule(generatePouleSchedule(config));
+      setMatches(generateMatchList(config.teamNames));
+      setStandings(generateInitialStandings(config.teamNames));
+    } catch (error) {
+      console.error('Error creating tournament:', error);
+      setMessage('Failed to create tournament. Please try again.');
+    }
+  };
+
+  const handleSaveResults = (results) => {
+    // Process results and update standings accordingly
+    const updatedStandings = calculateStandings(results);
+    setStandings(updatedStandings);
+  };
+
+  return (
+    <div className="App">
+      <h1>Volleyball Tournament Configuration</h1>
+      <ConfigurationForm onSubmit={handleCreateTournament} />
+      {message && <p className="confirmation-message">{message}</p>}
+      <PouleSchedule schedule={schedule} />
+      {matches.length > 0 && <MatchResults matches={matches} onSaveResults={handleSaveResults} />}
+      <LiveStandings standings={standings} />
+    </div>
+  );
+}
+
+// Updated generateMatchList function with initialized scores
+const generateMatchList = (teamNames) => {
+  // Initialize each match with team names and initial scores
+  return teamNames.map((team, index) => ({
+    teams: `${team} vs Team ${index + 1}`,
+    score1: 0, // Placeholder score
+    score2: 0, // Placeholder score
+  }));
+};
+
+const generatePouleSchedule = (config) => {
+  const { numPoules, numCourts, teamNames, startTime, matchTime } = config;
+  const poules = Array.from({ length: numPoules }, () => []);
+
+  // Distribute teams into poules
+  teamNames.forEach((team, index) => {
+    const pouleIndex = index % numPoules;
+    poules[pouleIndex].push(team);
+  });
+
+  // Helper function to add minutes to a time string (HHMM format)
+  const addMinutes = (time, minutes) => {
+    const hours = parseInt(time.slice(0, 2), 10);
+    const mins = parseInt(time.slice(2), 10) + minutes;
+    const newHours = hours + Math.floor(mins / 60);
+    const newMins = mins % 60;
+    return `${String(newHours).padStart(2, '0')}:${String(newMins).padStart(2, '0')}`;
+  };
+
+  // Generate the schedule
+  let currentTime = startTime;
+  const schedule = [];
+  poules.forEach((poule, pouleIndex) => {
+    for (let i = 0; i < poule.length - 1; i++) {
+      for (let j = i + 1; j < poule.length; j++) {
+        schedule.push({
+          time: currentTime,
+          teams: `${poule[i]} vs ${poule[j]}`,
+          poule: pouleIndex + 1,
+          court: (schedule.length % numCourts) + 1,
+        });
+        currentTime = addMinutes(currentTime.replace(':', ''), matchTime); // Increment time for each match
+      }
+    }
+  });
+
+  return schedule;
+};
+
+const generateInitialStandings = (teamNames) => {
+  return teamNames.map((name) => ({ name, played: 0, won: 0, points: 0 }));
+};
+
+const calculateStandings = (results, teamPoules) => {
+  const standings = {};
+
+  results.forEach(({ teams, score1, score2 }) => {
+    const [team1, team2] = teams.split(' vs ');
+    const poule1 = teamPoules[team1];
+    const poule2 = teamPoules[team2];
+
+    if (!standings[team1]) standings[team1] = { name: team1, played: 0, won: 0, points: 0, poule: poule1 };
+    if (!standings[team2]) standings[team2] = { name: team2, played: 0, won: 0, points: 0, poule: poule2 };
+
+    standings[team1].played += 1;
+    standings[team2].played += 1;
+
+    if (score1 > score2) {
+      standings[team1].won += 1;
+      standings[team1].points += 3;
+    } else if (score2 > score1) {
+      standings[team2].won += 1;
+      standings[team2].points += 3;
+    } else {
+      standings[team1].points += 1;
+      standings[team2].points += 1;
+    }
+  });
+
+  return Object.values(standings).sort((a, b) => b.points - a.points || b.won - a.won);
+};
+
+
+export default App;
+

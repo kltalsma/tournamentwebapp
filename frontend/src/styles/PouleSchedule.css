@@ -1,0 +1,16 @@
+.configuration .form-group {
+  margin-bottom: 1rem;
+}
+
+.configuration .form-group label {
+  display: inline-block;
+  width: 200px;
+  margin-right: 1rem;
+}
+
+.configuration .error-message {
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  background-color: #fff2f2;
+}
