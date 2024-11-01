@@ -6,7 +6,7 @@ import PouleSchedule from './components/PouleSchedule';
 import MatchResults from './components/MatchResults';
 import LiveStandings from './components/LiveStandings';
 import KnockoutRounds from './components/KnockoutRounds';
-import './styles/index.css';
+import './styles/index.css'; // Global styles
 
 const App = () => {
   // State variables

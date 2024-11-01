@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import "../styles/KnockoutRounds.css"; // Optional: Ensure correct path if needed
+import '../styles/KnockoutRounds.css'; // Corrected path
 
 const KnockoutRounds = ({ teams }) => {
   if (!teams || teams.length === 0) {

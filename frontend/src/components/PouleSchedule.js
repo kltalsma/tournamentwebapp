@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import "../styles/PouleSchedule.css"; // Optional: Ensure correct path if needed
+import '../styles/PouleSchedule.css'; // Corrected path
 
 const PouleSchedule = ({ schedule }) => {
   if (!schedule || schedule.length === 0) {

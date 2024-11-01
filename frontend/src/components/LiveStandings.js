@@ -1,8 +1,8 @@
-// frontend/src/components/LiveStandings.js
+/ frontend/src/components/LiveStandings.js
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import "../styles/LiveStandings.css"; // Optional: Ensure correct path if needed
+import '../styles/LiveStandings.css'; // Corrected path
 
 const LiveStandings = ({ standings }) => {
   if (!standings || Object.keys(standings).length === 0) {

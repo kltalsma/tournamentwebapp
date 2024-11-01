@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import "../styles/MatchResults.css"; // Optional: Ensure correct path if needed
+import '../styles/MatchResults.css'; // Corrected path
 
 const MatchResults = ({ matches, onSaveResults }) => {
   const [updatedMatches, setUpdatedMatches] = useState([]);
