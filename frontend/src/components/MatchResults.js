@@ -34,10 +34,18 @@ const MatchResults = ({ matches, onSaveResults }) => {
    * Handles the submission of updated match results.
    */
   const handleSubmit = () => {
+    // Check if all matches have both scores entered
+    const allScoresEntered = updatedMatches.every(match => match.score1 !== null && match.score2 !== null);
+
+    if (!allScoresEntered) {
+      alert('Please enter scores for all matches before saving.');
+      return;
+    }
+
     // Optional: Add confirmation before saving
     if (window.confirm('Are you sure you want to save the match results?')) {
       onSaveResults(updatedMatches);
-      alert('Match results saved successfully.');
+      // The confirmation message is handled in App.js
     }
   };
 

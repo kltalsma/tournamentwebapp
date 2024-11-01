@@ -1,4 +1,4 @@
-/ frontend/src/components/LiveStandings.js
+// frontend/src/components/LiveStandings.js
 
 import React from 'react';
 import PropTypes from 'prop-types';

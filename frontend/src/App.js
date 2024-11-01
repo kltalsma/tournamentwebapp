@@ -16,6 +16,7 @@ const App = () => {
   const [standings, setStandings] = useState({});
   const [knockoutStage, setKnockoutStage] = useState(false);
   const [knockoutTeams, setKnockoutTeams] = useState([]);
+  const [saveSuccess, setSaveSuccess] = useState(false); // New state for confirmation
 
   /**
    * Handles the submission of the configuration form.
@@ -27,6 +28,7 @@ const App = () => {
     setKnockoutStage(false);
     setSchedule([]);
     setResults([]);
+    setSaveSuccess(false); // Reset confirmation on new config
 
     // Initialize standings for all poules
     const initialStandings = {};
@@ -118,66 +120,77 @@ const App = () => {
    * @param {Array} pouleResults - Array of match objects within a poule.
    * @returns {Object} - Standings per team within the poule.
    */
-  const calculatePouleStandings = (pouleResults) => {
-    console.log('Calculating standings for poule results:', pouleResults); // Debugging Line
+const calculatePouleStandings = (pouleResults) => {
+  console.log('Calculating standings for poule results:', pouleResults); // Existing Log
 
-    const pouleStandings = {};
+  const pouleStandings = {};
 
-    pouleResults.forEach((match) => {
-      const [team1, team2] = match.teams.split(' vs ').map((t) => t.trim());
+  pouleResults.forEach((match) => {
+    const [team1, team2] = match.teams.split(' vs ').map((t) => t.trim());
 
-      // Initialize team standings if not already present
-      [team1, team2].forEach((team) => {
-        if (!pouleStandings[team]) {
-          pouleStandings[team] = {
-            name: team,
-            played: 0,
-            won: 0,
-            points: 0,
-            scored: 0,
-            against: 0,
-            difference: 0,
-          };
-        }
-      });
+    console.log(`Processing match: ${team1} vs ${team2} - Score: ${match.score1}-${match.score2}`); // New Log
 
-      // Only process matches with valid scores
-      if (match.score1 !== null && match.score2 !== null) {
-        const score1 = parseInt(match.score1, 10);
-        const score2 = parseInt(match.score2, 10);
-
-        // Update played games
-        pouleStandings[team1].played++;
-        pouleStandings[team2].played++;
-
-        // Update scored and against
-        pouleStandings[team1].scored += score1;
-        pouleStandings[team1].against += score2;
-        pouleStandings[team2].scored += score2;
-        pouleStandings[team2].against += score1;
-
-        // Update won and points
-        if (score1 > score2) {
-          pouleStandings[team1].won++;
-          pouleStandings[team1].points += 3;
-        } else if (score2 > score1) {
-          pouleStandings[team2].won++;
-          pouleStandings[team2].points += 3;
-        } else {
-          pouleStandings[team1].points += 1;
-          pouleStandings[team2].points += 1;
-        }
-
-        // Calculate goal difference
-        pouleStandings[team1].difference = pouleStandings[team1].scored - pouleStandings[team1].against;
-        pouleStandings[team2].difference = pouleStandings[team2].scored - pouleStandings[team2].against;
+    // Initialize team standings if not already present
+    [team1, team2].forEach((team) => {
+      if (!pouleStandings[team]) {
+        pouleStandings[team] = {
+          name: team,
+          played: 0,
+          won: 0,
+          points: 0,
+          scored: 0,
+          against: 0,
+          difference: 0,
+        };
       }
     });
 
-    console.log('Poule Standings:', pouleStandings); // Debugging Line
+    // Only process matches with valid scores
+    if (match.score1 !== null && match.score2 !== null) {
+      const score1 = parseInt(match.score1, 10);
+      const score2 = parseInt(match.score2, 10);
 
-    return pouleStandings;
-  };
+      // Update played games
+      pouleStandings[team1].played++;
+      pouleStandings[team2].played++;
+
+      // Update scored and against
+      pouleStandings[team1].scored += score1;
+      pouleStandings[team1].against += score2;
+      pouleStandings[team2].scored += score2;
+      pouleStandings[team2].against += score1;
+
+      console.log(`${team1} - Scored: ${score1}, Against: ${score2}`);
+      console.log(`${team2} - Scored: ${score2}, Against: ${score1}`);
+
+      // Update won and points
+      if (score1 > score2) {
+        pouleStandings[team1].won++;
+        pouleStandings[team1].points += 3;
+        console.log(`${team1} wins and gains 3 points.`);
+      } else if (score2 > score1) {
+        pouleStandings[team2].won++;
+        pouleStandings[team2].points += 3;
+        console.log(`${team2} wins and gains 3 points.`);
+      } else {
+        pouleStandings[team1].points += 1;
+        pouleStandings[team2].points += 1;
+        console.log(`Match ended in a draw. Both teams gain 1 point.`);
+      }
+
+      // Calculate goal difference
+      pouleStandings[team1].difference = pouleStandings[team1].scored - pouleStandings[team1].against;
+      pouleStandings[team2].difference = pouleStandings[team2].scored - pouleStandings[team2].against;
+
+      console.log(`${team1} - Difference: ${pouleStandings[team1].difference}`);
+      console.log(`${team2} - Difference: ${pouleStandings[team2].difference}`);
+    }
+  });
+
+  console.log('Final poule standings:', pouleStandings); // Existing Log
+
+  return pouleStandings;
+};
 
   /**
    * Handles the saving of match results.
@@ -199,7 +212,7 @@ const App = () => {
       return acc;
     }, {});
 
-    console.log('Results by Poule:', resultsByPoule); // Debugging Line
+    console.log('Results grouped by poule:', resultsByPoule); // Debugging Line
 
     const newStandings = { ...standings };
 
@@ -211,6 +224,10 @@ const App = () => {
 
     setResults(newResults);
     setStandings(newStandings);
+    setSaveSuccess(true); // Set confirmation message
+
+    // Optionally, reset the confirmation after a few seconds
+    setTimeout(() => setSaveSuccess(false), 5000);
   };
 
   /**
@@ -264,6 +281,9 @@ const App = () => {
           </button>
 
           {knockoutStage && <KnockoutRounds teams={knockoutTeams} />}
+
+          {/* Confirmation Message */}
+          {saveSuccess && <div className="confirmation-message">Match results saved successfully!</div>}
         </div>
       )}
     </div>
