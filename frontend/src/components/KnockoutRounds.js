@@ -2,26 +2,36 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import '../styles/KnockoutRounds.css'; // Optional: Create a CSS file for styling
+import "../styles/KnockoutRounds.css"; // Optional: Ensure correct path if needed
 
 const KnockoutRounds = ({ teams }) => {
   if (!teams || teams.length === 0) {
     return <div className="knockout-container">No teams available for knockout rounds.</div>;
   }
 
-  // Example structure for knockout rounds (e.g., Quarterfinals, Semifinals, Finals)
-  // This can be expanded based on the number of teams
+  /**
+   * Generates knockout matches based on the number of teams.
+   * Currently supports Quarterfinals for up to 8 teams.
+   * Can be extended for Semifinals and Finals.
+   * @param {Array} teams - Array of team objects.
+   * @returns {Array} - Array of knockout match objects.
+   */
   const generateKnockoutMatches = (teams) => {
     const matches = [];
+    const rounds = ['Quarterfinal', 'Semifinal', 'Final'];
+    let currentRoundIndex = 0;
+
+    // Determine the number of matches based on the number of teams
     for (let i = 0; i < teams.length; i += 2) {
       if (i + 1 < teams.length) {
         matches.push({
-          round: 'Quarterfinal',
+          round: rounds[currentRoundIndex],
           teams: `${teams[i].name} vs ${teams[i + 1].name}`,
           winner: null, // To be determined
         });
       }
     }
+
     return matches;
   };
 

@@ -141,36 +141,37 @@ const App = () => {
         }
       });
 
-      // Parse scores
-      const score1 = parseInt(match.score1, 10) || 0;
-      const score2 = parseInt(match.score2, 10) || 0;
+      // Only process matches with valid scores
+      if (match.score1 !== null && match.score2 !== null) {
+        const score1 = parseInt(match.score1, 10);
+        const score2 = parseInt(match.score2, 10);
 
-      // Update played games
-      pouleStandings[team1].played++;
-      pouleStandings[team2].played++;
+        // Update played games
+        pouleStandings[team1].played++;
+        pouleStandings[team2].played++;
 
-      // Update scored and against
-      pouleStandings[team1].scored += score1;
-      pouleStandings[team1].against += score2;
-      pouleStandings[team2].scored += score2;
-      pouleStandings[team2].against += score1;
+        // Update scored and against
+        pouleStandings[team1].scored += score1;
+        pouleStandings[team1].against += score2;
+        pouleStandings[team2].scored += score2;
+        pouleStandings[team2].against += score1;
 
-      // Update won and points
-      if (score1 > score2) {
-        pouleStandings[team1].won++;
-        pouleStandings[team1].points += 3;
-      } else if (score2 > score1) {
-        pouleStandings[team2].won++;
-        pouleStandings[team2].points += 3;
-      } else {
-        pouleStandings[team1].points += 1;
-        pouleStandings[team2].points += 1;
+        // Update won and points
+        if (score1 > score2) {
+          pouleStandings[team1].won++;
+          pouleStandings[team1].points += 3;
+        } else if (score2 > score1) {
+          pouleStandings[team2].won++;
+          pouleStandings[team2].points += 3;
+        } else {
+          pouleStandings[team1].points += 1;
+          pouleStandings[team2].points += 1;
+        }
+
+        // Calculate goal difference
+        pouleStandings[team1].difference = pouleStandings[team1].scored - pouleStandings[team1].against;
+        pouleStandings[team2].difference = pouleStandings[team2].scored - pouleStandings[team2].against;
       }
-    });
-
-    // Calculate goal difference
-    Object.values(pouleStandings).forEach((team) => {
-      team.difference = team.scored - team.against;
     });
 
     console.log('Poule Standings:', pouleStandings); // Debugging Line

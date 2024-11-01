@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import '../styles/ConfigurationForm.css'; // Optional: Create a CSS file for styling
+import "../styles/ConfigurationForm.css"; // Optional: Ensure correct path if needed
 
 const ConfigurationForm = ({ onSubmit }) => {
   const [teamNames, setTeamNames] = useState(['', '', '', '', '', '']);

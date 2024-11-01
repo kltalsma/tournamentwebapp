@@ -2,13 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import '../styles/MatchResults.css'; // Optional: Create a CSS file for styling
+import "../styles/MatchResults.css"; // Optional: Ensure correct path if needed
 
 const MatchResults = ({ matches, onSaveResults }) => {
   const [updatedMatches, setUpdatedMatches] = useState([]);
 
   useEffect(() => {
-    setUpdatedMatches(matches);
+    // Deep clone to prevent direct state mutation
+    const clonedMatches = matches.map(match => ({ ...match }));
+    setUpdatedMatches(clonedMatches);
   }, [matches]);
 
   /**
@@ -19,16 +21,24 @@ const MatchResults = ({ matches, onSaveResults }) => {
    */
   const handleScoreChange = (index, field, value) => {
     const newMatches = [...updatedMatches];
-    newMatches[index][field] = value === '' ? null : parseInt(value, 10);
-    setUpdatedMatches(newMatches);
+    const scoreValue = value === '' ? null : parseInt(value, 10);
+
+    // Validate that the score is a non-negative integer
+    if (scoreValue === null || (Number.isInteger(scoreValue) && scoreValue >= 0)) {
+      newMatches[index][field] = scoreValue;
+      setUpdatedMatches(newMatches);
+    }
   };
 
   /**
    * Handles the submission of updated match results.
    */
   const handleSubmit = () => {
-    onSaveResults(updatedMatches);
-    alert('Match results saved successfully.');
+    // Optional: Add confirmation before saving
+    if (window.confirm('Are you sure you want to save the match results?')) {
+      onSaveResults(updatedMatches);
+      alert('Match results saved successfully.');
+    }
   };
 
   return (

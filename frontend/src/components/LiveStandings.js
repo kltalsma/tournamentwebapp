@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import '../styles/LiveStandings.css'; // Optional: Create a CSS file for styling
+import "../styles/LiveStandings.css"; // Optional: Ensure correct path if needed
 
 const LiveStandings = ({ standings }) => {
   if (!standings || Object.keys(standings).length === 0) {
