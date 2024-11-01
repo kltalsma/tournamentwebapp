@@ -1,77 +1,26 @@
-.live-standings {
-  margin: 20px;
-  padding: 20px;
-  border-radius: 8px;
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* frontend/src/components/LiveStandings.css */
+
+.standings-container {
+  margin: 20px 0;
 }
 
-.live-standings h2 {
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.live-standings h3 {
-  color: #666;
-  margin: 15px 0;
+.poule-standings {
+  margin-bottom: 30px;
 }
 
 .standings-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
-  background-color: #fff;
 }
 
 .standings-table th,
 .standings-table td {
-  padding: 12px;
+  border: 1px solid #ddd;
+  padding: 8px;
   text-align: center;
-  border-bottom: 1px solid #eee;
 }
 
 .standings-table th {
-  background-color: #f5f5f5;
-  font-weight: bold;
-  color: #333;
+  background-color: #f2f2f2;
 }
 
-.text-left {
-  text-align: left;
-}
-
-.points-cell {
-  font-weight: bold;
-  color: #2c5282;
-}
-
-.positive {
-  color: #38a169;
-}
-
-.negative {
-  color: #e53e3e;
-}
-
-.even-row {
-  background-color: #f7fafc;
-}
-
-.odd-row {
-  background-color: #fff;
-}
-
-.standings-table tr:hover {
-  background-color: #ebf4ff;
-}
-
-@media (max-width: 768px) {
-  .standings-table {
-    font-size: 14px;
-  }
-
-  .standings-table th,
-  .standings-table td {
-    padding: 8px;
-  }
-}

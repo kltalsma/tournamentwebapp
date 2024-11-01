@@ -1,22 +1,20 @@
 // frontend/src/components/LiveStandings.js
 
 import React from 'react';
+import PropTypes from 'prop-types';
+import '../styles/LiveStandings.css'; // Optional: Create a CSS file for styling
 
 const LiveStandings = ({ standings }) => {
-  // Helper function to calculate difference
-  const calculateDifference = (scored, against) => scored - against;
-
-  // Ensure standings is a valid object before using Object.keys
-  if (!standings || typeof standings !== 'object') {
-    return <p>No standings available. Please save results to update standings.</p>;
+  if (!standings || Object.keys(standings).length === 0) {
+    return <div className="standings-container">No standings available.</div>;
   }
 
   return (
-    <div>
+    <div className="standings-container">
       <h2>Live Tournament Standings</h2>
-      {Object.keys(standings).map((pouleNumber) => (
-        <div key={pouleNumber}>
-          <h3>Poule {pouleNumber}</h3>
+      {Object.entries(standings).map(([poule, teams]) => (
+        <div key={poule} className="poule-standings">
+          <h3>Poule {poule}</h3>
           <table className="standings-table">
             <thead>
               <tr>
@@ -30,17 +28,8 @@ const LiveStandings = ({ standings }) => {
               </tr>
             </thead>
             <tbody>
-              {Object.values(standings[pouleNumber])
-                .sort((a, b) => {
-                  // First by points
-                  if (b.points !== a.points) return b.points - a.points;
-                  // Then by goal difference
-                  const diffA = calculateDifference(a.scored, a.against);
-                  const diffB = calculateDifference(b.scored, b.against);
-                  if (diffB !== diffA) return diffB - diffA;
-                  // Finally by goals scored
-                  return b.scored - a.scored;
-                })
+              {Object.values(teams)
+                .sort((a, b) => b.points - a.points || b.difference - a.difference)
                 .map((team) => (
                   <tr key={team.name}>
                     <td>{team.name}</td>
@@ -49,17 +38,7 @@ const LiveStandings = ({ standings }) => {
                     <td>{team.points}</td>
                     <td>{team.scored}</td>
                     <td>{team.against}</td>
-                    <td
-                      className={
-                        calculateDifference(team.scored, team.against) > 0
-                          ? 'positive'
-                          : calculateDifference(team.scored, team.against) < 0
-                          ? 'negative'
-                          : ''
-                      }
-                    >
-                      {calculateDifference(team.scored, team.against)}
-                    </td>
+                    <td>{team.difference}</td>
                   </tr>
                 ))}
             </tbody>
@@ -68,6 +47,11 @@ const LiveStandings = ({ standings }) => {
       ))}
     </div>
   );
+};
+
+// PropTypes for type checking
+LiveStandings.propTypes = {
+  standings: PropTypes.object.isRequired,
 };
 
 export default LiveStandings;

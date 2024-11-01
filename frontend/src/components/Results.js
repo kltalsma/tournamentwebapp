@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/PouleSchedule.css';
+import '.../styles/styles/PouleSchedule.css';
 
 function Results() {
   return (

@@ -1,41 +1,39 @@
-.confirmation-message {
-  margin-top: 20px;
-  padding: 10px;
-  border: 1px solid #4caf50;
-  background-color: #e8f5e9;
-  color: #388e3c;
-  border-radius: 4px;
-  font-size: 16px;
-  text-align: center;
+/* frontend/src/styles/index.css */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
+.app-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
 }
 
-table, th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-th {
-  background-color: #f5f5f5;
+h1,
+h2,
+h3 {
+  color: #333;
 }
 
 button {
-  margin-top: 10px;
-  padding: 8px 16px;
-  background-color: #4CAF50;
+  padding: 10px 20px;
+  margin: 10px 0;
+  background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #0056b3;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 

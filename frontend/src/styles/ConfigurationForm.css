@@ -1,16 +1,62 @@
-.configuration .form-group {
-  margin-bottom: 1rem;
-}
+/* frontend/src/components/ConfigurationForm.css */
 
-.configuration .form-group label {
-  display: inline-block;
-  width: 200px;
-  margin-right: 1rem;
-}
-
-.configuration .error-message {
-  padding: 0.5rem;
-  margin-bottom: 1rem;
+.configuration-form-container {
+  background-color: #ffffff;
+  padding: 20px;
+  border: 1px solid #ddd;
   border-radius: 4px;
-  background-color: #fff2f2;
 }
+
+.configuration-form .form-group {
+  margin-bottom: 15px;
+}
+
+.configuration-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.configuration-form input[type='text'],
+.configuration-form input[type='number'],
+.configuration-form input[type='time'] {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.team-input-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.team-input-group input {
+  flex: 1;
+}
+
+.remove-team-button {
+  margin-left: 10px;
+  background-color: #dc3545;
+}
+
+.remove-team-button:hover {
+  background-color: #c82333;
+}
+
+.add-team-button {
+  background-color: #17a2b8;
+}
+
+.add-team-button:hover {
+  background-color: #138496;
+}
+
+.submit-configuration-button {
+  background-color: #007bff;
+}
+
+.submit-configuration-button:hover {
+  background-color: #0056b3;
+}
+

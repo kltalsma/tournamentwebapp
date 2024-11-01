@@ -1,0 +1,14 @@
+/* frontend/src/components/KnockoutRounds.css */
+
+.knockout-container {
+  margin: 20px 0;
+}
+
+.knockout-match {
+  background-color: #fff3cd;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #ffeeba;
+  border-radius: 4px;
+}
+

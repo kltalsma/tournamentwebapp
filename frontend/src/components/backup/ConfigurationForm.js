@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Button from './ui/button';
+import Button from '../styles/ui/button';
 import axios from 'axios';
 
 const ConfigurationForm = ({ onSubmit }) => {

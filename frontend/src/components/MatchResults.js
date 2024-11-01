@@ -1,93 +1,93 @@
 // frontend/src/components/MatchResults.js
+
 import React, { useState, useEffect } from 'react';
-import '../styles/MatchResults.css';
+import PropTypes from 'prop-types';
+import '../styles/MatchResults.css'; // Optional: Create a CSS file for styling
 
 const MatchResults = ({ matches, onSaveResults }) => {
-  const [localResults, setLocalResults] = useState(
-    matches.reduce((acc, match) => {
-      acc[match.time] = { score1: match.score1 || 0, score2: match.score2 || 0 };
-      return acc;
-    }, {})
-  );
+  const [updatedMatches, setUpdatedMatches] = useState([]);
 
-  const handleScoreChange = (pouleIndex, matchIndex, scoreField, value) => {
-    const updatedResults = { ...localResults };
-    updatedResults[`${pouleIndex}-${matchIndex}`] = {
-      ...updatedResults[`${pouleIndex}-${matchIndex}`],
-      [scoreField]: parseInt(value) || 0,
-    };
-    setLocalResults(updatedResults);
+  useEffect(() => {
+    setUpdatedMatches(matches);
+  }, [matches]);
+
+  /**
+   * Handles the change of score inputs for a specific match.
+   * @param {number} index - The index of the match in the matches array.
+   * @param {string} field - The score field ('score1' or 'score2').
+   * @param {string} value - The new value entered by the user.
+   */
+  const handleScoreChange = (index, field, value) => {
+    const newMatches = [...updatedMatches];
+    newMatches[index][field] = value === '' ? null : parseInt(value, 10);
+    setUpdatedMatches(newMatches);
   };
 
-  const handleSave = () => {
-    const formattedResults = matches.map((match, index) => {
-      const pouleIndex = match.poule;
-      return {
-        ...match,
-        score1: localResults[`${pouleIndex}-${index}`]?.score1 || 0,
-        score2: localResults[`${pouleIndex}-${index}`]?.score2 || 0,
-      };
-    });
-    onSaveResults(formattedResults);
+  /**
+   * Handles the submission of updated match results.
+   */
+  const handleSubmit = () => {
+    onSaveResults(updatedMatches);
+    alert('Match results saved successfully.');
   };
 
   return (
-    <div>
+    <div className="match-results-container">
       <h2>Enter Match Results</h2>
-      {Object.entries(
-        matches.reduce((acc, match) => {
-          if (!acc[match.poule]) acc[match.poule] = [];
-          acc[match.poule].push(match);
-          return acc;
-        }, {})
-      ).map(([poule, pouleMatches]) => (
-        <div key={poule}>
-          <h3>Poule {poule}</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Match</th>
-                <th>Court</th>
-                <th>Referee</th>
-                <th>Score 1</th>
-                <th>Score 2</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pouleMatches.map((match, matchIndex) => (
-                <tr key={`${poule}-${matchIndex}`}>
-                  <td>{match.time}</td>
-                  <td>{match.teams}</td>
-                  <td>{match.court}</td>
-                  <td>{match.referee}</td>
-                  <td>
-                    <input
-                      type="number"
-                      value={localResults[`${poule}-${matchIndex}`]?.score1 || ''}
-                      onChange={(e) =>
-                        handleScoreChange(poule, matchIndex, 'score1', e.target.value)
-                      }
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      value={localResults[`${poule}-${matchIndex}`]?.score2 || ''}
-                      onChange={(e) =>
-                        handleScoreChange(poule, matchIndex, 'score2', e.target.value)
-                      }
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ))}
-      <button onClick={handleSave}>Save Results</button>
+      <table className="match-results-table">
+        <thead>
+          <tr>
+            <th>Poule</th>
+            <th>Time</th>
+            <th>Match</th>
+            <th>Court</th>
+            <th>Referee</th>
+            <th>Score 1</th>
+            <th>Score 2</th>
+          </tr>
+        </thead>
+        <tbody>
+          {updatedMatches.map((match, index) => (
+            <tr key={`${match.poule}-${match.teams}-${index}`}>
+              <td>{match.poule}</td>
+              <td>{match.time}</td>
+              <td>{match.teams}</td>
+              <td>{match.court}</td>
+              <td>{match.referee}</td>
+              <td>
+                <input
+                  type="number"
+                  min="0"
+                  value={match.score1 !== null ? match.score1 : ''}
+                  onChange={(e) => handleScoreChange(index, 'score1', e.target.value)}
+                  placeholder="0"
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  min="0"
+                  value={match.score2 !== null ? match.score2 : ''}
+                  onChange={(e) => handleScoreChange(index, 'score2', e.target.value)}
+                  placeholder="0"
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <button onClick={handleSubmit} className="save-results-button">
+        Save Results
+      </button>
     </div>
   );
 };
 
+// PropTypes for type checking
+MatchResults.propTypes = {
+  matches: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onSaveResults: PropTypes.func.isRequired,
+};
+
 export default MatchResults;
+

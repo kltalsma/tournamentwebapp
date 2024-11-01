@@ -1,16 +1,30 @@
-.configuration .form-group {
-  margin-bottom: 1rem;
+/* frontend/src/components/MatchResults.css */
+
+.match-results-container {
+  margin: 20px 0;
 }
 
-.configuration .form-group label {
-  display: inline-block;
-  width: 200px;
-  margin-right: 1rem;
+.match-results-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.configuration .error-message {
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  border-radius: 4px;
-  background-color: #fff2f2;
+.match-results-table th,
+.match-results-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
 }
+
+.match-results-table th {
+  background-color: #f2f2f2;
+}
+
+.save-results-button {
+  background-color: #28a745;
+}
+
+.save-results-button:hover {
+  background-color: #218838;
+}
+
