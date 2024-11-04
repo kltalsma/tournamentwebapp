@@ -60,3 +60,39 @@
   background-color: #0056b3;
 }
 
+/* frontend/src/styles/ConfigurationForm.css */
+
+.configuration-form-container {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.configuration-form label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.configuration-form input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  box-sizing: border-box;
+}
+
+.submit-configuration-button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #28a745; /* Bootstrap success color */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-configuration-button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+

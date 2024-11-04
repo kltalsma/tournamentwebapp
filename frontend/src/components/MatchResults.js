@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import '../styles/MatchResults.css'; // Corrected path
+import '../styles/MatchResults.css'; // Ensure this path is correct based on your project structure
 
 const MatchResults = ({ matches, onSaveResults }) => {
   const [updatedMatches, setUpdatedMatches] = useState([]);
@@ -19,37 +19,34 @@ const MatchResults = ({ matches, onSaveResults }) => {
    * @param {string} field - The score field ('score1' or 'score2').
    * @param {string} value - The new value entered by the user.
    */
-  const handleScoreChange = (index, field, value) => {
-    const newMatches = [...updatedMatches];
-    const scoreValue = value === '' ? null : parseInt(value, 10);
-
-    // Validate that the score is a non-negative integer
-    if (scoreValue === null || (Number.isInteger(scoreValue) && scoreValue >= 0)) {
-      newMatches[index][field] = scoreValue;
-      setUpdatedMatches(newMatches);
-    }
-  };
-
+   
+   const handleScoreChange = (index, field, value) => {
+     const newMatches = [...updatedMatches];
+     const scoreValue = value === '' ? null : parseInt(value, 10);
+   
+     if (scoreValue === null || (Number.isInteger(scoreValue) && scoreValue >= 0)) {
+       newMatches[index][field] = scoreValue;
+       setUpdatedMatches(newMatches);
+       console.log(`Match ${index} - ${field}: ${scoreValue}`); // Debugging Line
+     }
+   };
   /**
    * Handles the submission of updated match results.
    */
-  const handleSubmit = () => {
-    // Check if all matches have both scores entered
-    const allScoresEntered = updatedMatches.every(match => match.score1 !== null && match.score2 !== null);
+   const handleSubmit = () => {
+      console.log('Updated matches in MatchResults before save:', JSON.stringify(updatedMatches, null, 2));
+     const allScoresEntered = updatedMatches.every(match => match.score1 !== null && match.score2 !== null);
+   
+     if (!allScoresEntered) {
+       alert('Please enter scores for all matches before saving.');
+       return;
+     }
+   
+     console.log('Submitting match results:', JSON.stringify(updatedMatches, null, 2)); // Log all match results
+     onSaveResults(updatedMatches);
+   };
 
-    if (!allScoresEntered) {
-      alert('Please enter scores for all matches before saving.');
-      return;
-    }
-
-    // Optional: Add confirmation before saving
-    if (window.confirm('Are you sure you want to save the match results?')) {
-      onSaveResults(updatedMatches);
-      // The confirmation message is handled in App.js
-    }
-  };
-
-  return (
+return (
     <div className="match-results-container">
       <h2>Enter Match Results</h2>
       <table className="match-results-table">

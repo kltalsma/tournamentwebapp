@@ -2,51 +2,38 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import '../styles/PouleSchedule.css'; // Corrected path
+import '../styles/PouleSchedule.css'; // Ensure this path is correct based on your project structure
 
 const PouleSchedule = ({ schedule }) => {
-  if (!schedule || schedule.length === 0) {
-    return <div className="schedule-container">No schedule available.</div>;
-  }
-
-  // Group matches by poule
-  const scheduleByPoule = schedule.reduce((acc, match) => {
-    const poule = match.poule;
-    if (!acc[poule]) {
-      acc[poule] = [];
-    }
-    acc[poule].push(match);
-    return acc;
-  }, {});
-
   return (
-    <div className="schedule-container">
+    <div className="poule-schedule-container">
       <h2>Match Schedule</h2>
-      {Object.entries(scheduleByPoule).map(([poule, matches]) => (
-        <div key={poule} className="poule-schedule">
-          <h3>Poule {poule}</h3>
-          <table className="schedule-table">
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Match</th>
-                <th>Court</th>
-                <th>Referee</th>
+      {schedule.length === 0 ? (
+        <p>No matches scheduled yet. Please generate the schedule.</p>
+      ) : (
+        <table className="poule-schedule-table">
+          <thead>
+            <tr>
+              <th>Poule</th>
+              <th>Time</th>
+              <th>Match</th>
+              <th>Court</th>
+              <th>Referee</th>
+            </tr>
+          </thead>
+          <tbody>
+            {schedule.map((match, index) => (
+              <tr key={`${match.poule}-${match.teams}-${index}`}>
+                <td>{match.poule}</td>
+                <td>{match.time}</td>
+                <td>{match.teams}</td>
+                <td>{match.court}</td>
+                <td>{match.referee}</td>
               </tr>
-            </thead>
-            <tbody>
-              {matches.map((match, index) => (
-                <tr key={`${poule}-${index}`}>
-                  <td>{match.time}</td>
-                  <td>{match.teams}</td>
-                  <td>{match.court}</td>
-                  <td>{match.referee}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ))}
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };

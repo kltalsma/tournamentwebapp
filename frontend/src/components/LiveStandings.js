@@ -1,10 +1,13 @@
 // frontend/src/components/LiveStandings.js
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import '../styles/LiveStandings.css'; // Corrected path
+import '../styles/LiveStandings.css';
 
 const LiveStandings = ({ standings }) => {
+  useEffect(() => {
+    console.log('Received standings in LiveStandings:', JSON.stringify(standings, null, 2)); // Log standings received
+  }, [standings]);
+
   if (!standings || Object.keys(standings).length === 0) {
     return <div className="standings-container">No standings available.</div>;
   }
@@ -49,7 +52,6 @@ const LiveStandings = ({ standings }) => {
   );
 };
 
-// PropTypes for type checking
 LiveStandings.propTypes = {
   standings: PropTypes.object.isRequired,
 };
